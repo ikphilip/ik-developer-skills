@@ -27,14 +27,16 @@ Transform a Product Requirements Document into a Technical Architecture Document
 
 ### Step 2: Investigate the codebase
 
-Dispatch `Explore` subagents (foreground, since synthesis depends on their results) in parallel to cover distinct concerns. Don't perform this search inline — keep the main context focused on synthesis, not raw file contents. Typical split:
+Before dispatching, decide which concerns the PRD actually implicates from its Functional Requirements and User Stories — don't dispatch a category the feature doesn't touch. A pure UI change (e.g., relayout, client-side validation) skips Backend/API and Data Storage; a pure backend/data change (e.g., new endpoint, scheduled job) skips Frontend. Only skip a category when the PRD gives no indication it's touched; when in doubt, dispatch it. Dependencies is worth dispatching whenever any new capability is being added, since it's what determines whether something new is even needed.
+
+Dispatch `Explore` subagents (foreground, since synthesis depends on their results) in parallel to cover the concerns selected above. Each dispatch must start a fresh subagent instance with no shared context from this conversation or from the other Explore dispatches, and must set `model: haiku` — investigation is mechanical file-finding, not synthesis, so it doesn't need a larger model. Don't perform this search inline — keep the main context focused on synthesis, not raw file contents. Candidate categories:
 
 1. **Frontend patterns** — component structure, state management, styling conventions, and any existing UI in the feature's area.
 2. **Backend / API patterns** — controller/service/route conventions, existing endpoints touching this domain.
 3. **Data storage** — ORM/schema conventions, migration patterns, existing models/tables relevant to the feature.
 4. **Dependencies** — what's already in package.json/composer.json/etc. that could satisfy the PRD's needs before reaching for something new.
 
-Ask each subagent to report concrete file paths and pattern examples, not general descriptions — the architecture doc needs to point at real code.
+Cap each subagent's report: cite file path + line plus a one-sentence description per finding, no pasted code blocks, and no more than 5 findings per category. Ask each subagent to report concrete file paths and pattern examples, not general descriptions — the architecture doc needs to point at real code, not a transcript of the search.
 
 ### Step 3: Draft the architecture
 
@@ -135,7 +137,7 @@ Save to: `.local-notes/architecture/{feature-name}-{version}-architecture.md`
 
 ## Non-Functional Considerations
 
-[Performance, security, scalability constraints carried over from the PRD's Technical Constraints, and how the design addresses them]
+[Security constraints carried over from the PRD's Technical Constraints, and how the design addresses them]
 
 ---
 
@@ -157,6 +159,8 @@ Save to: `.local-notes/architecture/{feature-name}-{version}-architecture.md`
 
 - Read the full PRD before investigating the codebase — the requirements set the scope of what to investigate.
 - Delegate codebase investigation to Explore subagents; synthesize, don't search inline.
+- Dispatch only the Explore categories the PRD's requirements actually implicate — skip Frontend/Backend/Data Storage cleanly when the feature doesn't touch that layer.
+- Dispatch each Explore subagent fresh with `model: haiku`, and cap its report to citations plus one-line descriptions — no pasted code, no more than 5 findings per category.
 - Cite real file paths for every "existing pattern" claim — no hand-waving.
 - Trace every architecture component back to a PRD requirement.
 - Check for and incorporate a prior Stella review before drafting a revision.
@@ -167,6 +171,7 @@ Save to: `.local-notes/architecture/{feature-name}-{version}-architecture.md`
 
 - Don't invent new patterns or libraries when an existing one in the codebase already solves the problem.
 - Don't skip codebase investigation because the feature "looks simple."
+- Don't dispatch an Explore category the PRD gives no indication is touched — but don't skip one you're unsure about either; when in doubt, dispatch it.
 - Don't review your own architecture doc — that's Stella's job, in a fresh subagent.
 - Don't let the document balloon beyond what a task-breakdown agent needs — precise components, not prose padding.
 - Don't hand off to task planning while the review still recommends another iteration.

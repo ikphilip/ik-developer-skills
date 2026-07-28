@@ -49,39 +49,35 @@ Evaluate requirements across five dimensions. If a prior Chiman review exists, a
 
 #### Scoring Breakdown:
 
-**Business Value & Goals (30 points)**
+**Business Value & Goals (20 points)**
 - 10 pts: Clear problem statement and business need
-- 10 pts: Measurable success metrics and KPIs
-- 10 pts: Expected outcomes and ROI justification
+- 10 pts: Expected outcomes and business impact
 
-**Functional Requirements (25 points)**
-- 10 pts: Complete user stories with acceptance criteria
-- 10 pts: Clear feature descriptions and workflows
-- 5 pts: Edge cases and error handling defined
+**Functional Requirements (30 points)**
+- 12 pts: Complete user stories with acceptance criteria
+- 12 pts: Clear feature descriptions and workflows
+- 6 pts: Edge cases and error handling defined
 
-**User Experience (20 points)**
-- 8 pts: Well-defined user personas
-- 7 pts: User journey and interaction flows
-- 5 pts: UI/UX preferences and constraints
+**User Experience (25 points)**
+- 10 pts: Well-defined user personas
+- 9 pts: User journey and interaction flows
+- 6 pts: UI/UX preferences and constraints
 
 **Technical Constraints (15 points)**
-- 5 pts: Performance requirements
-- 5 pts: Security and compliance needs
-- 5 pts: Integration requirements
+- 8 pts: Security and compliance needs
+- 7 pts: Integration requirements
 
 **Scope & Priorities (10 points)**
-- 5 pts: Clear MVP definition
-- 3 pts: Phased delivery plan
-- 2 pts: Priority rankings
+- 10 pts: Clear MVP definition
 
 **Display format:**
 ```
 📊 Requirements Quality Score: [TOTAL]/100
 
 Breakdown:
-- Business Value & Goals: [X]/30
-- Functional Requirements: [X]/25
-- User Experience: [X]/20
+- Business Value & Goals: [X]/20
+- Functional Requirements: [X]/30
+- User Experience: [X]/25
 - Technical Constraints: [X]/15
 - Scope & Priorities: [X]/10
 
@@ -95,30 +91,26 @@ Breakdown:
 
 **Question categories by dimension:**
 
-**Business Value (if <24/30):**
+**Business Value (if <16/20):**
 - "What specific business problem are we solving?"
-- "How will we measure success?"
 - "What happens if we don't build this?"
 
-**Functional Requirements (if <20/25):**
+**Functional Requirements (if <24/30):**
 - "Can you walk me through the main user workflows?"
 - "What should happen when [specific edge case]?"
 - "What are the must-have vs. nice-to-have features?"
 
-**User Experience (if <16/20):**
+**User Experience (if <20/25):**
 - "Who are the primary users?"
 - "What are their goals and pain points?"
 - "Can you describe the ideal user experience?"
 
 **Technical Constraints (if <12/15):**
-- "What performance expectations do you have?"
 - "Are there security or compliance requirements?"
 - "What systems need to integrate with this?"
 
 **Scope & Priorities (if <8/10):**
 - "What's the minimum viable product (MVP)?"
-- "How should we phase the delivery?"
-- "What are the top 3 priorities?"
 
 **Ask 2-3 questions at a time** using `AskUserQuestion` tool. Don't overwhelm.
 
@@ -203,17 +195,6 @@ Save to: `.local-notes/requirements/{feature-name}-{version}-prd.md`
 
 ---
 
-## Success Metrics
-
-**Primary KPIs:**
-- [Metric 1]: [Target value and measurement method]
-- [Metric 2]: [Target value and measurement method]
-- [Metric 3]: [Target value and measurement method]
-
-**Validation**: [How and when we'll measure these metrics]
-
----
-
 ## User Personas
 
 ### Primary: [Persona Name]
@@ -268,10 +249,6 @@ Save to: `.local-notes/requirements/{feature-name}-{version}-prd.md`
 
 ## Technical Constraints
 
-### Performance
-- [Response time requirements: e.g., "API calls < 200ms"]
-- [Scalability: e.g., "Support 10k concurrent users"]
-
 ### Security
 - [Authentication/authorization requirements]
 - [Data protection and privacy considerations]
@@ -288,22 +265,14 @@ Save to: `.local-notes/requirements/{feature-name}-{version}-prd.md`
 
 ---
 
-## MVP Scope & Phasing
+## MVP Scope
 
-### Phase 1: MVP (Required for Initial Launch)
+### Required for Initial Launch
 - [Core feature 1]
 - [Core feature 2]
 - [Core feature 3]
 
 **MVP Definition**: [What's the minimum that delivers value?]
-
-### Phase 2: Enhancements (Post-Launch)
-- [Enhancement 1]
-- [Enhancement 2]
-
-### Future Considerations
-- [Potential future feature 1]
-- [Potential future feature 2]
 
 ---
 
