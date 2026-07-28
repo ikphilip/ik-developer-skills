@@ -1,0 +1,17 @@
+{
+  "name": "ik-developer-skills",
+  "version": "1.0.0",
+  "description": "Useful skills for development at Interactive Knowledge",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikphilip/ik-developer-skills.git"
+  },
+  "license": "MIT",
+  "author": "Philip Curley",
+  "homepage": "https://interactiveknowledge.com",
+  "keywords": [
+    "skills",
+    "ai",
+    "agents"
+  ]
+}
