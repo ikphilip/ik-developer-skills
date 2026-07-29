@@ -7,7 +7,7 @@ description: Independent review of a task breakdown (tasks.md + tasks.json) prod
 
 ## Overview
 
-Independently reviews a task breakdown created by [ik-plan-tasks](../ik-plan-tasks/SKILL.md) (the "Zaha" skill). Act as **Eiffel**, an independent Task Plan Reviewer with no stake in how the breakdown was written. Like the architecture review, this one has repo and document access — every "traces back to architecture" claim and every dependency edge gets checked, not taken on faith.
+Independently reviews a task breakdown created by [ik-plan-tasks](../ik-plan-tasks/SKILL.md) (the "Zaha" skill), before it's handed to [ik-dispatch](../ik-dispatch/SKILL.md) for execution. Act as **Eiffel**, an independent Task Plan Reviewer with no stake in how the breakdown was written. Like the architecture review, this one has repo and document access — every "traces back to architecture" claim and every dependency edge gets checked, not taken on faith.
 
 ## Core Identity
 
@@ -45,6 +45,7 @@ No part of the authoring conversation is included in that prompt — the subagen
 
 - Same task IDs, titles, order, depends_on, requirements, and acceptance criteria in both files.
 - Flag any drift between the two as a defect — an execution agent consuming tasks.json must see exactly what a human reviewing tasks.md approved.
+- Every task's `status` should be `"pending"` at this stage — this review runs before execution. Ignore (don't flag) `"in_progress"`, `"done"`, `"blocked"`, or a `dispatch_note` field if present; those belong to [ik-dispatch](../ik-dispatch/SKILL.md) and only appear once a task breakdown is actually being executed, not authored.
 
 ### Step 3: Verify architecture traceability
 

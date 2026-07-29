@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A set of six Claude Code Agent Skills (`skills/*/SKILL.md`) that implement an author → review → hand-off pipeline for taking a feature from a raw request to an executable task list. There is no application code, no build, no test suite, and no dependencies — the deliverable *is* the Markdown. "Changing this codebase" means editing skill instructions.
+A set of Claude Code Agent Skills (`skills/*/SKILL.md`) that implement an author → review → hand-off pipeline for taking a feature from a raw request to an executable task list, plus a dispatch skill that executes that task list. There is no application code, no build, no test suite, and no dependencies beyond a single TypeScript CLI helper run via `npx tsx` — the deliverable *is* the Markdown (and that one script). "Changing this codebase" means editing skill instructions.
 
 Git repo has no commits yet and no remote; `skills/` is currently untracked.
 
@@ -22,6 +22,8 @@ Reviews are always written alongside their source as `{feature}-{version}-review
 
 Full chain: Mani writes the PRD → auto-dispatches Chiman → if the review's **Recommendation** approves, dispatches Cosmo cold → Cosmo writes architecture → auto-dispatches Stella → if the review's **Verdict** approves, dispatches Zaha cold → Zaha writes tasks → auto-dispatches Eiffel. Each author reads its upstream document itself rather than inheriting session assumptions.
 
+A fourth skill, `ik-dispatch`, is not part of the author/review chain — it's invoked separately, on demand, once a task breakdown exists. It executes an approved tasks.json one task at a time via cold coder/tester subagents, updating status through `skills/ik-dispatch/scripts/tasks-cli.ts` (the repo's one script, run via `npx tsx`). Dispatch never edits source code itself.
+
 ## Invariants to preserve when editing skills
 
 These are the load-bearing rules. Breaking one silently degrades the pipeline into an agent grading its own homework.
@@ -34,6 +36,8 @@ These are the load-bearing rules. Breaking one silently degrades the pipeline in
 - **Per-stage independent versioning.** Architecture and task versions start at `1.0` and increment only when *that* document is revised — they do not track the upstream document's version.
 - **Revisions carry a "Review Feedback Addressed" table.** Present only on versions ≥ the second pass, mapping each prior finding to its resolution.
 - **`tasks.md` and `tasks.json` must stay byte-for-byte equivalent in content.** The JSON is what an execution agent consumes; the Markdown is what a human approves. Eiffel treats drift between them as a defect.
+- **Dispatch only writes tasks.json, and only through `tasks-cli.ts`.** `ik-dispatch` must never use `Edit`/`Write` or shell commands against source files — all implementation and testing happens in subagents it dispatches. If this boundary erodes, the "builder can't review its own work" principle collapses at the execution stage too.
+- **`status` values beyond `"pending"` are dispatch's, not the author's.** `ik-plan-tasks` generates every task as `status: "pending"`; `ik-dispatch` is the only skill that transitions it to `in_progress`, `done`, or `blocked`, and is the only writer of the optional `dispatch_note` field. Don't have `ik-plan-tasks` or `ik-review-tasks` invent or validate against other status values.
 
 ## Cross-skill references
 

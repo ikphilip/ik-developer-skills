@@ -141,7 +141,7 @@ Save to: `.local-notes/tasks/{feature-name}-{version}-tasks.md`
 }
 ```
 
-`status` starts as `"pending"` for every task on generation; an execution agent updates it later. `depends_on` and `requirements` are always arrays, even when empty.
+`status` starts as `"pending"` for every task on generation. [ik-dispatch](../ik-dispatch/SKILL.md) (Dispatch) is the only skill that transitions it further, to `"in_progress"`, `"done"`, or `"blocked"`, and may add an optional `dispatch_note` field per task recording why it's blocked or what its tester subagent found. Don't emit those values or that field here — they belong to the execution stage. `depends_on` and `requirements` are always arrays, even when empty.
 
 ## Important Behaviors
 
@@ -173,4 +173,4 @@ Save to: `.local-notes/tasks/{feature-name}-{version}-tasks.md`
 
 ---
 
-**Remember**: The architecture is the spec for "how" — task planning is the spec for "in what order and by whom." Don't re-litigate design decisions here, just make them executable.
+**Remember**: The architecture is the spec for "how" — task planning is the spec for "in what order and by whom." Don't re-litigate design decisions here, just make them executable. Execution itself is [ik-dispatch](../ik-dispatch/SKILL.md)'s job, not this skill's.
