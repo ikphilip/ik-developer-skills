@@ -29,7 +29,7 @@ Transform a Product Requirements Document into a Technical Architecture Document
 
 Before dispatching, decide which concerns the PRD actually implicates from its Functional Requirements and User Stories — don't dispatch a category the feature doesn't touch. A pure UI change (e.g., relayout, client-side validation) skips Backend/API and Data Storage; a pure backend/data change (e.g., new endpoint, scheduled job) skips Frontend. Only skip a category when the PRD gives no indication it's touched; when in doubt, dispatch it. Dependencies is worth dispatching whenever any new capability is being added, since it's what determines whether something new is even needed.
 
-Dispatch `Explore` subagents (foreground, since synthesis depends on their results) in parallel to cover the concerns selected above. Each dispatch must start a fresh subagent instance with no shared context from this conversation or from the other Explore dispatches, and must set `model: haiku` — investigation is mechanical file-finding, not synthesis, so it doesn't need a larger model. Don't perform this search inline — keep the main context focused on synthesis, not raw file contents. Candidate categories:
+Dispatch `Explore` subagents (foreground, since synthesis depends on their results) in parallel to cover the concerns selected above. Each dispatch must start a fresh subagent instance with no shared context from this conversation or from the other Explore dispatches. Set `model` to the fastest/lightest model available in this environment (e.g. Haiku) — investigation is mechanical file-finding, not synthesis, so it doesn't need a larger model. If the user has specified a preferred model for this kind of dispatch, use that instead. If no lightweight model is available at all, omit `model` and fall back to the default. Don't perform this search inline — keep the main context focused on synthesis, not raw file contents. Candidate categories:
 
 1. **Frontend patterns** — component structure, state management, styling conventions, and any existing UI in the feature's area.
 2. **Backend / API patterns** — controller/service/route conventions, existing endpoints touching this domain.
@@ -160,7 +160,7 @@ Save to: `.local-notes/architecture/{feature-name}-{version}-architecture.md`
 - Read the full PRD before investigating the codebase — the requirements set the scope of what to investigate.
 - Delegate codebase investigation to Explore subagents; synthesize, don't search inline.
 - Dispatch only the Explore categories the PRD's requirements actually implicate — skip Frontend/Backend/Data Storage cleanly when the feature doesn't touch that layer.
-- Dispatch each Explore subagent fresh with `model: haiku`, and cap its report to citations plus one-line descriptions — no pasted code, no more than 5 findings per category.
+- Dispatch each Explore subagent fresh with the fastest/lightest model available (or the user's specified preference), and cap its report to citations plus one-line descriptions — no pasted code, no more than 5 findings per category.
 - Cite real file paths for every "existing pattern" claim — no hand-waving.
 - Trace every architecture component back to a PRD requirement.
 - Check for and incorporate a prior Stella review before drafting a revision.
