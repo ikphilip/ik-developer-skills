@@ -6,10 +6,14 @@
  *   npx tsx tasks-cli.ts next-ready <tasks.json>
  *   npx tsx tasks-cli.ts set-status <tasks.json> <task-id> <status> [--note "text"]
  *
- * `next-ready` prints the single next task (as JSON) whose status is "pending"
- * and whose depends_on are all "done", choosing the lowest `order`. Prints
- * `null` if none are ready (either everything is done, or the only remaining
- * pending tasks are blocked on incomplete dependencies).
+ * `next-ready` prints the single next task object (as JSON) whose status is
+ * "pending" and whose depends_on are all "done", choosing the lowest `order`.
+ * The returned object includes every field on the task (id, title, description,
+ * files, architecture_refs, acceptance_criteria, depends_on, order, status,
+ * dispatch_note, etc.) so the caller does not need to re-read tasks.json to
+ * build a subagent prompt. Prints `null` if none are ready (either everything
+ * is done, or the only remaining pending tasks are blocked on incomplete
+ * dependencies).
  *
  * `set-status` updates one task's status in place: "pending" | "in_progress" |
  * "done" | "blocked". Rewrites the file atomically and prints the updated task.
